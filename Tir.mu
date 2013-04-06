@@ -21,17 +21,21 @@ begin
         if f1 < f0 and y1 < f0 then 
           ha := 0; 
           hb := 1
+        else 
+          if f0 = Dom::Float(y1) then 
+            ha := 0; 
+            hb := 0
+          end_if
         end_if
       end_if
     end_if
   end_if; 
-  while RK(f, g, x0, x1, y0, a, 1)[-1][2] <= y1 do
+  while RK(f, g, x0, x1, y0, a, 1)[-1][2] < y1 do
     a := a + ha
   end_while; 
-  while y1 <= RK(f, g, x0, x1, y0, b, 1)[-1][2] do
+  while y1 < RK(f, g, x0, x1, y0, b, 1)[-1][2] do
     b := b + hb
   end_while; 
-  print(a, b); 
   repeat 
     fab := RK(f, g, x0, x1, y0, (a + b)/2, 100)[-1][2]; 
     if y1 < fab then 
@@ -41,7 +45,7 @@ begin
         b := float((a + b)/2)
       end_if
     end_if; 
-    w := abs(RK(f, g, x0, x1, y0, (a + b)/2, 100)[-1][2] - y1)/abs(y1); 
+    w := abs(RK(f, g, x0, x1, y0, (a + b)/2, 100)[-1][2] - y1)/abs(1); 
     print(w)
   until w <= p end_repeat; 
   fonction := []; 
