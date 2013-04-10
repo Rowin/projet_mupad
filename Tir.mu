@@ -37,6 +37,7 @@ begin
     b := b + hb
   end_while; 
   fab := RK(f, g, x0, x1, y0, (a + b)/2, 100)[-1][2]; 
+  w := 1; 
   repeat 
     if y1 < fab then 
       a := float((a + b)/2)
@@ -45,13 +46,14 @@ begin
         b := float((a + b)/2)
       end_if
     end_if; 
-    fab := RK(f, g, x0, x1, y0, (a + b)/2, 100)[-1][2]; 
+    fab := RK(f, g, x0, x1, y0, (a + b)/2, floor(exp(floor(p/w) + 10)))[-1][2];\
+ 
     w := abs(fab - y1)/abs(y1); 
-    print(w)
+    print(w, floor(exp(floor(p/w) + 10)))
   until w <= p end_repeat; 
   fonction := []; 
   derivee := []; 
-  points := RK(f, g, x0, x1, y0, (a + b)/2, 100); 
+  points := RK(f, g, x0, x1, y0, (a + b)/2, floor(exp(11))); 
   for i from 1 to nops(points) do 
     fonction := [op(fonction), [points[i][1], points[i][2]]]; 
     derivee := [op(derivee), [points[i][1], points[i][3]]]
