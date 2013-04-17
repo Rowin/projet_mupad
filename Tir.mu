@@ -1,63 +1,64 @@
-Tir := hold(proc(f, g, x0, x1, y0, y1, p)
+Tir := hold(proc(A, B, C, D, x0, x1, y0, y1, nbre_points_sortie, precision\
+, variable)
   name Tir;
-  local a, b, ha, hb, w, f0, f1, fab, fonction, derivee, points;
+  local i, y1_0, y1_1, var_a, var_b, a, b, y1_ab, w;
 begin
-  a := 0; 
-  b := 0; 
-  f0 := RK(f, g, x0, x1, y0, 0, 1)[-1][2]; 
-  f1 := RK(f, g, x0, x1, y0, 1, 1)[-1][2]; 
-  if f0 < f1 and f0 < y1 then 
-    ha := 1; 
-    hb := 0
-  else 
-    if f0 < f1 and y1 < f0 then 
-      ha := 0; 
-      hb := -1
+  alias(y1_compute(z0, nbre_points) = RungeKutta(A, B, C, D, x0, x1, y0, z\
+0, nbre_points, variable)[-1][2]); 
+  y1_0 := y1_compute(0, 1); 
+  y1_1 := y1_compute(1, 1); 
+  if y1_0 < y1_1 then 
+    if y1 < y1_0 then 
+      var_a := 0; 
+      var_b := -1
     else 
-      if f1 < f0 and f0 < y1 then 
-        ha := -1; 
-        hb := 0
+      if y1_0 < y1 then 
+        var_a := 1; 
+        var_b := 0
       else 
-        if f1 < f0 and y1 < f0 then 
-          ha := 0; 
-          hb := 1
+        var_a := 0; 
+        var_b := 0
+      end_if
+    end_if
+  else 
+    if y1_1 < y1_0 then 
+      if y1 < y1_0 then 
+        var_a := 0; 
+        var_b := 1
+      else 
+        if y1_0 < y1 then 
+          var_a := -1; 
+          var_b := 0
         else 
-          if f0 = Dom::Float(y1) then 
-            ha := 0; 
-            hb := 0
-          end_if
+          var_a := 0; 
+          var_b := 0
         end_if
       end_if
     end_if
   end_if; 
-  while RK(f, g, x0, x1, y0, a, 1)[-1][2] < y1 do
-    a := a + ha
+  a := 0; 
+  b := 0; 
+  while y1_compute(a, 1) < y1 do
+    a := a + var_a
   end_while; 
-  while y1 < RK(f, g, x0, x1, y0, b, 1)[-1][2] do
-    b := b + hb
+  while y1 < y1_compute(b, 1) do
+    b := b + var_b
   end_while; 
-  fab := RK(f, g, x0, x1, y0, (a + b)/2, 100)[-1][2]; 
-  w := 1; 
+  y1_ab := y1_compute((a + b)/2, 10); 
+  w := abs((y1_ab - y1)/y1); 
   repeat 
-    if y1 < fab then 
-      a := float((a + b)/2)
+    if y1 <= y1_ab then 
+      a := (a + b)/2
     else 
-      if fab < y1 then 
-        b := float((a + b)/2)
+      if y1_ab <= y1 then 
+        b := (a + b)/2
       end_if
     end_if; 
-    fab := RK(f, g, x0, x1, y0, (a + b)/2, floor(exp(floor(p/w) + 10)))[-1][2];\
- 
-    w := abs(fab - y1)/abs(y1); 
-    print(w, floor(exp(floor(p/w) + 10)))
-  until w <= p end_repeat; 
-  fonction := []; 
-  derivee := []; 
-  points := RK(f, g, x0, x1, y0, (a + b)/2, floor(exp(11))); 
-  for i from 1 to nops(points) do 
-    fonction := [op(fonction), [points[i][1], points[i][2]]]; 
-    derivee := [op(derivee), [points[i][1], points[i][3]]]
-  end_for; 
-  return((a + b)/2, fonction, derivee)
+    y1_ab := y1_compute((a + b)/2, round(100/w + 1)); 
+    w := abs((y1_ab - y1)/y1); 
+    print(w)
+  until w <= precision end_repeat; 
+  return((a + b)/2, RungeKutta(A, B, C, D, x0, x1, y0, (a + b)/2, nbre_poi\
+nts_sortie, variable))
 end_proc):
 
