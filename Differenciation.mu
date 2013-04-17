@@ -15,8 +15,8 @@ begin
   k := 0; 
   for i from x0 + pas to x1 - pas step pas do 
     k := k + 1; 
-    listeA := [op(listeA), [0*j $ j = 1..k - 1, float(a(i)), float(b(i)), float\
-(c(i)), 0*j $ j = k + 3..r]]; 
+    listeA := [op(listeA), [0*j $ j = 1..k - 1, float(a(i)), float(b(i)), \
+float(c(i)), 0*j $ j = k + 3..r]]; 
     if i = x0 + pas then 
       listeD := [op(listeD), float(D(i) - a(x0)*y0)]
     else 
