@@ -1,0 +1,85 @@
+\documentclass{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage{enumerate}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+
+\title{Projet MuPAD - Documentation}
+\author{Killian POULET-ALLIGAND \and Nicolas LAUNAY \and Sébastien LEMAIRE--HEY \and Etienne Caillosse}
+\date{Avril 2013}
+
+\begin{document}
+\maketitle
+\chapter{Organisation}
+Dans la racine du projet se trouvent cette aide, ainsi que le diaporama de la soutenance. On y trouvera aussi le document de l'Université de Nantes qui a servi de support au projet mais qui n'est plus disponible en ligne.
+\\
+\\	
+Le code MuPAD à proprement parler est situé dans le dossier src/. Dans celui-ci, on trouvera un dossier procedures/ qui contient les procédures du programme. À la racine du dossier src/ se trouvent les fichiers contenant les applications scientifiques du projet. Un fichier suffixé d'un D indique l'utilisation de la méthode des différences finies, tandis qu'un T indique l'usage de la méthode de Tir.
+\\
+\\
+Concernant le dossier src/procedures/, les fichiers sont en double. L'un au format .mn, accessible directement avec MuPAD. L'autre, au format .mu, contient les sources des procédures au format texte, afin de permettre l'import de celles-ci dans les différents autres fichiers de MuPAD. 
+
+\chapter{Code}
+\section{Généralités}
+À chaque fin de fichier de procédure, on trouvera une ligne comme celle-ci : 
+\begin{verbatim}
+	write(Text, NOTEBOOKPATH."Fichier.mu", Procedure)
+\end{verbatim}
+
+Cette ligne permet de créer le fichier Fichier.mu, qui contient le code de la procédure "Procedure", au format texte brut. Ces fichiers peuvent alors être importé via la ligne suivante (que l'on trouve en début des fichiers qui se servent des procédures) : 
+\begin{verbatim}
+	read(NOTEBOOKPATH.pathname("procedures")."Fichier.mu");	
+\end{verbatim}
+
+La procédure "Procedure" est alors utilisable directement depuis le fichier où la ligne a été exécuté.
+
+\section{Procédures}
+Dans cette section sont indiqués les paramètres, les spécificités de chaque procédure du projet.
+\subsection{RungeKutta}
+Cette procédure permet la résolution d'équations différentielles à l'ordre 2 par la méthode de Runge-Kutta à l'ordre 4.
+\\
+\\
+Le code de cette procédure est disponible dans le fichier src/procedures/RK.mn
+\\
+\\
+Elle s'appelle ainsi :  
+\begin{verbatim}
+RungeKutta(A, B, C, D, x0, x1, y0, z0, nbre_points, variable)
+\end{verbatim}
+Les paramètres sont les suivants : 
+\begin{itemize}
+	\item $A$, $B$, $C$ et $D$ sont les paramètres de l'équation différentielles : $A.y''(x) + B.y'(x) + C.y(x) = D$ ;
+	\item $x0$ et $x1$ sont les bornes de l'intervalle de travail. $x0$ doit bien sûr être inférieur à $x1$ ;
+	\item $y0$ est l'image de $x0$ par la fonction recherchée ;
+	\item $z0$ est l'image de $x0$ par la DÉRIVÉE de la fonction recherchée ;
+	\item $nbre_points$ indique le nombre de points que la procédure doit calculer ;
+	\item variable est la variable dont dépendent les paramètres $A$, $B$, $C$ et $D$. Ainsi, la syntaxe est simplifié dans l'entrée des paramètres, le $fp::unapply$ étant exécuté par la procédure.
+\end{itemize}
+Cette procédure retourne la liste des points de la fonction solution, qui peuvent directement être tracés avec $plot::PointList2d()$
+
+\subsection{Tir}
+Cette procédure permet la résolution des équations différentielles à l'ordre 2 avec conditions aux limites.
+\\
+\\
+Le code de cette procédure est disponible dans le fichier src/procedures/Tir.mn.
+\\
+\\
+Elle s'appelle ainsi :
+\begin{verbatim}
+Tir(A, B, C, D, x0, x1, y0, y1, nbre_points_sortie, precision, variable)
+\end{verbatim}
+Les paramètres sont les suivants : 
+\begin{itemize}
+	\item $A$, $B$, $C$ et $D$ sont les paramètres de l'équation différentielles : $A.y''(x) + B.y'(x) + C.y(x) = D$ ;
+	\item $x0$ et $x1$ sont les bornes de l'intervalle de travail. $x0$ doit bien sûr être inférieur à $x1$ ;
+	\item $y0$ est l'image de $x0$ par la fonction recherchée ;
+	\item $y1$ est l'image de $x1$ par la fonction recherchée ;
+	\item $nbre_points$ indique le nombre de points que la procédure devra calculer ;
+	\item $variable$ est la variable dont dépendent les paramètres $A$, $B$, $C$ et $D$.
+\end{itemize}
+
+Cette procédure retourne la dérivée de la fonction en $x0$, ainsi que la liste des points de la droite solution, traçable directement avec $plot::PointList2d()$.
+\end{document}
+
