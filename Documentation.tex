@@ -5,6 +5,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[francais]{babel}
 \usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{amsmath}
 
 \title{Projet MuPAD - Documentation}
 \author{Killian POULET-ALLIGAND \and Nicolas LAUNAY \and Sébastien LEMAIRE--HEY \and Etienne Caillosse}
@@ -80,6 +81,49 @@ Les paramètres sont les suivants :
 	\item $variable$ est la variable dont dépendent les paramètres $A$, $B$, $C$ et $D$.
 \end{itemize}
 
-Cette procédure retourne la dérivée de la fonction en $x0$, ainsi que la liste des points de la droite solution, traçable directement avec $plot::PointList2d()$.
+Cette procédure retourne la dérivée de la fonction en $x0$, ainsi que la liste des points de la droite solution, traçable directement avec $plot::PointList2d()$. Attention, il n'est pas possible de résoudre des équations d'ordre 1 : si A est nul, il se produira une erreur (division par 0).
+
+\subsection{Differenciation}
+Cette procédure permet la résolution des équations différentielles à l'ordre 2 avec conditions aux limites.
+\\
+\\
+Le code de cette procédure est disponible dans le fichier src/procedures/Differenciation.mn.
+\\
+\\
+Elle s'appelle ainsi : 
+\begin{verbatim}
+Differenciation(A, B, C, D, x0, x1, y0, y1, r, variable)
+\end{verbatim}
+Les paramètres sont les suivants : 
+\begin{itemize}
+    \item $A$, $B$, $C$ et $D$ sont les paramètres de l'équation différentielles : $A.y''(x) + B.y'(x) + C.y(x) + D = 0$ ;
+    \item $x0$ et $x1$ sont les bornes de l'intervalle de travail. $x0$ doit bien sûr être inférieur à $x1$ ;
+    \item $y0$ est l'image de $x0$ par la fonction recherchée ;
+	\item $y1$ est l'image de $x1$ par la fonction recherchée ;
+	\item $r$ indique le nombre de points que la procédure devra calculer ;
+	\item $variable$ est la variable dont dépendent les paramètres $A$, $B$, $C$ et $D$.
+\end{itemize}
+
+Cette procédure retourne la liste des points de la droite solution, traçable directement avec $plot::PointList2d()$. La résolution d'équations d'ordre 1 est à priori possible, mais peux retourner des résultats étranges.
+
+\subsection{Cramer}
+Cette procédure permet la résolution des systèmes d'équations différentielles du type : 
+$A.X = D$, où A est une matrice carrée de taille $n$, X une matrice colonne de taille $n$, contenant les inconnues, et D une autre matrice colonne de taille $n$. La procédure utilise la méthode de Cramer.
+\\
+\\
+Le code de cette procédure est disponible dans le fichier src/procedures/Differenciation.mn.
+\\
+\\
+Elle s'appelle ainsi : 
+\begin{verbatim}
+Cramer := proc(A, D)
+\end{verbatim}
+Les paramètres sont les suivants : 
+\begin{itemize}
+    \item $A$ est un objet du type Matrix. Il s'agit d'une matrice carrée de taille n, dont les coefficients sont connus.
+    \item $D$ est un objet du type Matrix. Il s'agit d'une matrice colonne de taille n, dont les coefficients sont connus.
+\end{itemize}
+
+Cette procédure retourne la liste des coefficients de la matrice solution.
 \end{document}
 
