@@ -50,7 +50,7 @@ RungeKutta(A, B, C, D, x0, x1, y0, z0, nbre_points, variable)
 \end{verbatim}
 Les paramètres sont les suivants : 
 \begin{itemize}
-	\item $A$, $B$, $C$ et $D$ sont les paramètres de l'équation différentielles : $A.y''(x) + B.y'(x) + C.y(x) + D = 0$ ;
+	\item $A$, $B$, $C$ et $D$ sont les paramètres de l'équation différentielles : $A.y''(x) + B.y'(x) + C.y(x) = D$ ;
 	\item $x0$ et $x1$ sont les bornes de l'intervalle de travail. $x0$ doit bien sûr être inférieur à $x1$ ;
 	\item $y0$ est l'image de $x0$ par la fonction recherchée ;
 	\item $z0$ est l'image de $x0$ par la DÉRIVÉE de la fonction recherchée ;
@@ -72,7 +72,7 @@ Tir(A, B, C, D, x0, x1, y0, y1, nbre_points_sortie, precision, variable)
 \end{verbatim}
 Les paramètres sont les suivants : 
 \begin{itemize}
-	\item $A$, $B$, $C$ et $D$ sont les paramètres de l'équation différentielles : $A.y''(x) + B.y'(x) + C.y(x) + D = 0$ ;
+	\item $A$, $B$, $C$ et $D$ sont les paramètres de l'équation différentielles : $A.y''(x) + B.y'(x) + C.y(x) = D$ ;
 	\item $x0$ et $x1$ sont les bornes de l'intervalle de travail. $x0$ doit bien sûr être inférieur à $x1$ ;
 	\item $y0$ est l'image de $x0$ par la fonction recherchée ;
 	\item $y1$ est l'image de $x1$ par la fonction recherchée ;
